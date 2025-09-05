@@ -1,10 +1,14 @@
 package com.maison.maisonpicturebackend.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.maison.maisonpicturebackend.model.dto.user.UserQueryRequest;
 import com.maison.maisonpicturebackend.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.maison.maisonpicturebackend.model.vo.LoginUserVO;
+import com.maison.maisonpicturebackend.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
 * @author shunhewang
@@ -56,4 +60,9 @@ public interface UserService extends IService<User> {
     boolean userLogout(HttpServletRequest request);
 
 
+    UserVO getUserVO(User user);
+
+    List<UserVO> getUserVOList(List<User> userList);
+
+    QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
 }

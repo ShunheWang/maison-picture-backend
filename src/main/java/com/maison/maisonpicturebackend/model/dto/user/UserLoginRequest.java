@@ -1,4 +1,4 @@
-package com.maison.maisonpicturebackend.model.dto;
+package com.maison.maisonpicturebackend.model.dto.user;
 
 import lombok.Data;
 
