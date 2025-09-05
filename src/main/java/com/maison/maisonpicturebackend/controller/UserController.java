@@ -1,7 +1,9 @@
 package com.maison.maisonpicturebackend.controller;
 
+import com.maison.maisonpicturebackend.annotation.AuthCheck;
 import com.maison.maisonpicturebackend.common.BaseResponse;
 import com.maison.maisonpicturebackend.common.ResultUtils;
+import com.maison.maisonpicturebackend.constant.UserConstant;
 import com.maison.maisonpicturebackend.exception.ErrorCode;
 import com.maison.maisonpicturebackend.exception.ThrowUtils;
 import com.maison.maisonpicturebackend.model.dto.UserLoginRequest;
@@ -9,6 +11,7 @@ import com.maison.maisonpicturebackend.model.dto.UserRegisterRequest;
 import com.maison.maisonpicturebackend.model.entity.User;
 import com.maison.maisonpicturebackend.model.vo.LoginUserVO;
 import com.maison.maisonpicturebackend.service.UserService;
+import io.swagger.annotations.Authorization;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,6 +28,7 @@ public class UserController {
      * 用户注册
      */
     @PostMapping("/register")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         ThrowUtils.throwIf(userRegisterRequest == null, ErrorCode.PARAMS_ERROR);
         String userAccount = userRegisterRequest.getUserAccount();
