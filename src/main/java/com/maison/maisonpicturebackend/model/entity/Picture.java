@@ -116,5 +116,11 @@ public class Picture {
      */
     private Date reviewTime;
 
+    /**
+     * 缩略图 url
+     */
+    private String thumbnailUrl;
+
+
 
 }

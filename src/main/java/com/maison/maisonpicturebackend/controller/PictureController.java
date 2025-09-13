@@ -230,7 +230,7 @@ public class PictureController {
             return ResultUtils.success(cachedPage);
         }
 
-        // 查询数据库
+        // 4. 查询数据库
         Page<Picture> picturePage = pictureService.page(new Page<>(current, size),
                 pictureService.getQueryWrapper(pictureQueryRequest));
         // 获取封装类
