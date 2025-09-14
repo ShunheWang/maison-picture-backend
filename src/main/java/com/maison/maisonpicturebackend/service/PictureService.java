@@ -2,10 +2,7 @@ package com.maison.maisonpicturebackend.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.maison.maisonpicturebackend.model.dto.picture.PictureQueryRequest;
-import com.maison.maisonpicturebackend.model.dto.picture.PictureReviewRequest;
-import com.maison.maisonpicturebackend.model.dto.picture.PictureUploadByBatchRequest;
-import com.maison.maisonpicturebackend.model.dto.picture.PictureUploadRequest;
+import com.maison.maisonpicturebackend.model.dto.picture.*;
 import com.maison.maisonpicturebackend.model.entity.Picture;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.maison.maisonpicturebackend.model.entity.User;
@@ -24,6 +21,10 @@ public interface PictureService extends IService<Picture> {
 
 
     PictureVO uploadPicture(Object inputSource, PictureUploadRequest pictureUploadRequest, User loginUser);
+
+    void deletePicture(long pictureId, User loginUser);
+
+    void editPicture(PictureEditRequest pictureEditRequest, User loginUser);
 
     QueryWrapper<Picture> getQueryWrapper(PictureQueryRequest pictureQueryRequest);
 
@@ -55,4 +56,5 @@ public interface PictureService extends IService<Picture> {
             User loginUser
     );
 
+    void checkPictureAuth(User loginUser, Picture picture);
 }
