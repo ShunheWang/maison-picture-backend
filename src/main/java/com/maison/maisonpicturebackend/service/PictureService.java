@@ -10,6 +10,7 @@ import com.maison.maisonpicturebackend.model.vo.PictureVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
 * @author shunhewang
@@ -57,4 +58,6 @@ public interface PictureService extends IService<Picture> {
     );
 
     void checkPictureAuth(User loginUser, Picture picture);
+
+    List<PictureVO> searchPictureByColor(Long spaceId, String picColor, User loginUser);
 }
