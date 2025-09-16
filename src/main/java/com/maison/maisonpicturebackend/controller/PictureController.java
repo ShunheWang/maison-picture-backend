@@ -1,11 +1,15 @@
 package com.maison.maisonpicturebackend.controller;
 
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.maison.maisonpicturebackend.annotation.AuthCheck;
+import com.maison.maisonpicturebackend.api.aliyunai.AliYunAiApi;
+import com.maison.maisonpicturebackend.api.aliyunai.model.CreateOutPaintingTaskResponse;
+import com.maison.maisonpicturebackend.api.aliyunai.model.GetOutPaintingTaskResponse;
 import com.maison.maisonpicturebackend.api.imagesearch.ImageSearchApiFacade;
 import com.maison.maisonpicturebackend.api.imagesearch.model.ImageSearchResult;
 import com.maison.maisonpicturebackend.common.BaseResponse;
@@ -16,12 +20,10 @@ import com.maison.maisonpicturebackend.exception.BusinessException;
 import com.maison.maisonpicturebackend.exception.ErrorCode;
 import com.maison.maisonpicturebackend.exception.ThrowUtils;
 import com.maison.maisonpicturebackend.model.dto.picture.*;
-import com.maison.maisonpicturebackend.model.dto.space.SpaceLevel;
 import com.maison.maisonpicturebackend.model.entity.Picture;
 import com.maison.maisonpicturebackend.model.entity.Space;
 import com.maison.maisonpicturebackend.model.entity.User;
 import com.maison.maisonpicturebackend.model.enums.PictureReviewStatusEnum;
-import com.maison.maisonpicturebackend.model.enums.SpaceLevelEnum;
 import com.maison.maisonpicturebackend.model.vo.PictureTagCategory;
 import com.maison.maisonpicturebackend.model.vo.PictureVO;
 import com.maison.maisonpicturebackend.service.PictureService;
@@ -38,10 +40,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/picture")
@@ -59,6 +59,10 @@ public class PictureController {
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+
+
+    @Resource
+    private AliYunAiApi aliYunAiApi;
 
     private final Cache<String, String> LOCAL_CACHE =
             Caffeine.newBuilder().initialCapacity(1024)
@@ -348,5 +352,31 @@ public class PictureController {
         pictureService.editPictureByBatch(pictureEditByBatchRequest, loginUser);
         return ResultUtils.success(true);
     }
+
+    /**
+     * 创建 AI 扩图任务
+     */
+    @PostMapping("/out_painting/create_task")
+    public BaseResponse<CreateOutPaintingTaskResponse> createPictureOutPaintingTask(
+            @RequestBody CreatePictureOutPaintingTaskRequest createPictureOutPaintingTaskRequest,
+            HttpServletRequest request) {
+        if (createPictureOutPaintingTaskRequest == null || createPictureOutPaintingTaskRequest.getPictureId() == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        CreateOutPaintingTaskResponse response = pictureService.createPictureOutPaintingTask(createPictureOutPaintingTaskRequest, loginUser);
+        return ResultUtils.success(response);
+    }
+
+    /**
+     * 查询 AI 扩图任务
+     */
+    @GetMapping("/out_painting/get_task")
+    public BaseResponse<GetOutPaintingTaskResponse> getPictureOutPaintingTask(String taskId) {
+        ThrowUtils.throwIf(StrUtil.isBlank(taskId), ErrorCode.PARAMS_ERROR);
+        GetOutPaintingTaskResponse task = aliYunAiApi.getOutPaintingTask(taskId);
+        return ResultUtils.success(task);
+    }
+
 
 }
