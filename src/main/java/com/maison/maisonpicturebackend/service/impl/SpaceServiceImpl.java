@@ -13,13 +13,16 @@ import com.maison.maisonpicturebackend.exception.ThrowUtils;
 import com.maison.maisonpicturebackend.model.dto.space.SpaceAddRequest;
 import com.maison.maisonpicturebackend.model.dto.space.SpaceQueryRequest;
 import com.maison.maisonpicturebackend.model.entity.Space;
+import com.maison.maisonpicturebackend.model.entity.SpaceUser;
 import com.maison.maisonpicturebackend.model.entity.User;
 import com.maison.maisonpicturebackend.model.enums.SpaceLevelEnum;
+import com.maison.maisonpicturebackend.model.enums.SpaceRoleEnum;
 import com.maison.maisonpicturebackend.model.enums.SpaceTypeEnum;
 import com.maison.maisonpicturebackend.model.vo.SpaceVO;
 import com.maison.maisonpicturebackend.model.vo.UserVO;
 import com.maison.maisonpicturebackend.service.SpaceService;
 import com.maison.maisonpicturebackend.mapper.SpaceMapper;
+import com.maison.maisonpicturebackend.service.SpaceUserService;
 import com.maison.maisonpicturebackend.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -44,6 +47,9 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private SpaceUserService spaceUserService;
 
     @Resource
     private TransactionTemplate transactionTemplate;
@@ -87,8 +93,18 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
                 // 写入数据库
                 boolean result = this.save(space);
                 ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
-                // 返回新写入的数据 id
+                // 如果是团队空间，关联新增团队成员记录
+                if (SpaceTypeEnum.TEAM.getValue() == spaceAddRequest.getSpaceType()) {
+                    SpaceUser spaceUser = new SpaceUser();
+                    spaceUser.setSpaceId(space.getId());
+                    spaceUser.setUserId(userId);
+                    spaceUser.setSpaceRole(SpaceRoleEnum.ADMIN.getValue());
+                    result = spaceUserService.save(spaceUser);
+                    ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR, "创建团队成员记录失败");
+                }
+// 返回新写入的数据 id
                 return space.getId();
+
             });
 
             // 返回结果是包装类，可以做一些处理

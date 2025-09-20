@@ -9,6 +9,7 @@ import com.maison.maisonpicturebackend.constant.UserConstant;
 import com.maison.maisonpicturebackend.exception.BusinessException;
 import com.maison.maisonpicturebackend.exception.ErrorCode;
 import com.maison.maisonpicturebackend.exception.ThrowUtils;
+import com.maison.maisonpicturebackend.manager.auth.SpaceUserAuthManager;
 import com.maison.maisonpicturebackend.model.dto.space.*;
 import com.maison.maisonpicturebackend.model.entity.Space;
 import com.maison.maisonpicturebackend.model.entity.User;
@@ -37,6 +38,9 @@ public class SpaceController {
 
     @Resource
     private SpaceService spaceService;
+
+    @Resource
+    private SpaceUserAuthManager spaceUserAuthManager;
 
     @GetMapping("/list/level")
     public BaseResponse<List<SpaceLevel>> listSpaceLevel() {
@@ -132,9 +136,14 @@ public class SpaceController {
         // 查询数据库
         Space space = spaceService.getById(id);
         ThrowUtils.throwIf(space == null, ErrorCode.NOT_FOUND_ERROR);
+        SpaceVO spaceVO = spaceService.getSpaceVO(space, request);
+        User loginUser = userService.getLoginUser(request);
+        List<String> permissionList = spaceUserAuthManager.getPermissionList(space, loginUser);
+        spaceVO.setPermissionList(permissionList);
         // 获取封装类
-        return ResultUtils.success(spaceService.getSpaceVO(space, request));
+        return ResultUtils.success(spaceVO);
     }
+
 
     /**
      * 分页获取空间列表（仅管理员可用）
