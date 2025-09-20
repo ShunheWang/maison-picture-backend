@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.maison.maisonpicturebackend.exception.BusinessException;
 import com.maison.maisonpicturebackend.exception.ErrorCode;
 import com.maison.maisonpicturebackend.exception.ThrowUtils;
+import com.maison.maisonpicturebackend.manager.sharding.DynamicShardingManager;
 import com.maison.maisonpicturebackend.model.dto.space.SpaceAddRequest;
 import com.maison.maisonpicturebackend.model.dto.space.SpaceQueryRequest;
 import com.maison.maisonpicturebackend.model.entity.Space;
@@ -25,10 +26,12 @@ import com.maison.maisonpicturebackend.mapper.SpaceMapper;
 import com.maison.maisonpicturebackend.service.SpaceUserService;
 import com.maison.maisonpicturebackend.service.UserService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
+import javax.servlet.Registration;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +53,11 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
 
     @Resource
     private SpaceUserService spaceUserService;
+
+    // 为了方便部署, 注释掉分表
+//    @Resource
+//    @Lazy
+//    private DynamicShardingManager dynamicShardingManager;
 
     @Resource
     private TransactionTemplate transactionTemplate;
@@ -102,7 +110,9 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
                     result = spaceUserService.save(spaceUser);
                     ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR, "创建团队成员记录失败");
                 }
-// 返回新写入的数据 id
+                // 创建空间分表 - 仅对团队空间生效 (说明: 为方便部署, 暂时不使用)
+//                dynamicShardingManager.createSpacePictureTable(space);
+                // 返回新写入的数据 id
                 return space.getId();
 
             });
