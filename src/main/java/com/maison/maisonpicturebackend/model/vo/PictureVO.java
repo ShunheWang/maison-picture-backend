@@ -1,6 +1,7 @@
 package com.maison.maisonpicturebackend.model.vo;
 
 import cn.hutool.json.JSONUtil;
+import com.maison.maisonpicture.interfaces.vo.user.UserVO;
 import com.maison.maisonpicturebackend.model.entity.Picture;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;

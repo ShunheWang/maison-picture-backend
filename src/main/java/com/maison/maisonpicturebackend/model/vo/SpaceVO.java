@@ -1,5 +1,6 @@
 package com.maison.maisonpicturebackend.model.vo;
 
+import com.maison.maisonpicture.interfaces.vo.user.UserVO;
 import com.maison.maisonpicturebackend.model.entity.Space;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;

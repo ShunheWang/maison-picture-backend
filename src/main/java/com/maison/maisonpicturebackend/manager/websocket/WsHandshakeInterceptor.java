@@ -6,11 +6,11 @@ import com.maison.maisonpicturebackend.manager.auth.SpaceUserAuthManager;
 import com.maison.maisonpicturebackend.manager.auth.model.SpaceUserPermissionConstant;
 import com.maison.maisonpicturebackend.model.entity.Picture;
 import com.maison.maisonpicturebackend.model.entity.Space;
-import com.maison.maisonpicturebackend.model.entity.User;
+import com.maison.maisonpicture.domain.user.entity.User;
 import com.maison.maisonpicturebackend.model.enums.SpaceTypeEnum;
 import com.maison.maisonpicturebackend.service.PictureService;
 import com.maison.maisonpicturebackend.service.SpaceService;
-import com.maison.maisonpicturebackend.service.UserService;
+import com.maison.maisonpicture.application.service.UserApplicationService;
 import com.sun.istack.internal.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
@@ -30,7 +30,7 @@ import java.util.Map;
 public class WsHandshakeInterceptor implements HandshakeInterceptor {
 
     @Resource
-    private UserService userService;
+    private UserApplicationService userApplicationService;
 
     @Resource
     private PictureService pictureService;
@@ -51,7 +51,7 @@ public class WsHandshakeInterceptor implements HandshakeInterceptor {
                 log.error("缺少图片参数，拒绝握手");
                 return false;
             }
-            User loginUser = userService.getLoginUser(servletRequest);
+            User loginUser = userApplicationService.getLoginUser(servletRequest);
             if (ObjUtil.isEmpty(loginUser)) {
                 log.error("用户未登录，拒绝握手");
                 return false;

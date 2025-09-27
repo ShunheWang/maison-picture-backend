@@ -3,7 +3,7 @@ package com.maison.maisonpicturebackend.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.maison.maisonpicturebackend.model.dto.space.analyze.*;
 import com.maison.maisonpicturebackend.model.entity.Space;
-import com.maison.maisonpicturebackend.model.entity.User;
+import com.maison.maisonpicture.domain.user.entity.User;
 import com.maison.maisonpicturebackend.model.vo.space.analyze.*;
 
 import java.util.List;

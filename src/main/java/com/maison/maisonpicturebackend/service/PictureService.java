@@ -6,10 +6,9 @@ import com.maison.maisonpicturebackend.api.aliyunai.model.CreateOutPaintingTaskR
 import com.maison.maisonpicturebackend.model.dto.picture.*;
 import com.maison.maisonpicturebackend.model.entity.Picture;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.maison.maisonpicturebackend.model.entity.User;
+import com.maison.maisonpicture.domain.user.entity.User;
 import com.maison.maisonpicturebackend.model.vo.PictureVO;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

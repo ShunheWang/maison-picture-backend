@@ -6,8 +6,8 @@ import com.maison.maisonpicturebackend.manager.websocket.PictureEditHandler;
 import com.maison.maisonpicturebackend.manager.websocket.model.PictureEditMessageTypeEnum;
 import com.maison.maisonpicturebackend.manager.websocket.model.PictureEditRequestMessage;
 import com.maison.maisonpicturebackend.manager.websocket.model.PictureEditResponseMessage;
-import com.maison.maisonpicturebackend.model.entity.User;
-import com.maison.maisonpicturebackend.service.UserService;
+import com.maison.maisonpicture.domain.user.entity.User;
+import com.maison.maisonpicture.application.service.UserApplicationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class PictureEditEventWorkHandler implements WorkHandler<PictureEditEvent
     private PictureEditHandler pictureEditHandler;
 
     @Resource
-    private UserService userService;
+    private UserApplicationService userApplicationService;
 
     @Override
     public void onEvent(PictureEditEvent event) throws Exception {
@@ -51,7 +51,7 @@ public class PictureEditEventWorkHandler implements WorkHandler<PictureEditEvent
                 PictureEditResponseMessage pictureEditResponseMessage = new PictureEditResponseMessage();
                 pictureEditResponseMessage.setType(PictureEditMessageTypeEnum.ERROR.getValue());
                 pictureEditResponseMessage.setMessage("消息类型错误");
-                pictureEditResponseMessage.setUser(userService.getUserVO(user));
+                pictureEditResponseMessage.setUser(userApplicationService.getUserVO(user));
                 session.sendMessage(new TextMessage(JSONUtil.toJsonStr(pictureEditResponseMessage)));
         }
     }

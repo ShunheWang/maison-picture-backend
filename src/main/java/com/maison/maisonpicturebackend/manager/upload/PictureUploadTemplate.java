@@ -8,7 +8,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.maison.maisonpicturebackend.config.CosClientConfig;
 import com.maison.maisonpicturebackend.exception.BusinessException;
 import com.maison.maisonpicturebackend.exception.ErrorCode;
-import com.maison.maisonpicturebackend.manager.CosManager;
+import com.maison.maisonpicture.infrastructure.api.CosManager;
 import com.maison.maisonpicturebackend.model.dto.file.UploadPictureResult;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.model.ciModel.persistence.CIObject;

@@ -16,13 +16,13 @@ import com.maison.maisonpicturebackend.manager.auth.model.SpaceUserPermissionCon
 import com.maison.maisonpicturebackend.model.entity.Picture;
 import com.maison.maisonpicturebackend.model.entity.Space;
 import com.maison.maisonpicturebackend.model.entity.SpaceUser;
-import com.maison.maisonpicturebackend.model.entity.User;
+import com.maison.maisonpicture.domain.user.entity.User;
 import com.maison.maisonpicturebackend.model.enums.SpaceRoleEnum;
 import com.maison.maisonpicturebackend.model.enums.SpaceTypeEnum;
 import com.maison.maisonpicturebackend.service.PictureService;
 import com.maison.maisonpicturebackend.service.SpaceService;
 import com.maison.maisonpicturebackend.service.SpaceUserService;
-import com.maison.maisonpicturebackend.service.UserService;
+import com.maison.maisonpicture.application.service.UserApplicationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -53,7 +53,7 @@ public class StpInterfaceImpl implements StpInterface {
     private PictureService pictureService;
 
     @Resource
-    private UserService userService;
+    private UserApplicationService userApplicationService;
 
     @Resource
     private SpaceService spaceService;
@@ -122,7 +122,7 @@ public class StpInterfaceImpl implements StpInterface {
             spaceId = picture.getSpaceId();
             // 公共图库，仅本人或管理员可操作
             if (spaceId == null) {
-                if (picture.getUserId().equals(userId) || userService.isAdmin(loginUser)) {
+                if (picture.getUserId().equals(userId) || userApplicationService.isAdmin(loginUser)) {
                     return ADMIN_PERMISSIONS;
                 } else {
                     // 不是自己的图片，仅可查看
@@ -138,7 +138,7 @@ public class StpInterfaceImpl implements StpInterface {
         // 根据 Space 类型判断权限
         if (space.getSpaceType() == SpaceTypeEnum.PRIVATE.getValue()) {
             // 私有空间，仅本人或管理员有权限
-            if (space.getUserId().equals(userId) || userService.isAdmin(loginUser)) {
+            if (space.getUserId().equals(userId) || userApplicationService.isAdmin(loginUser)) {
                 return ADMIN_PERMISSIONS;
             } else {
                 return new ArrayList<>();

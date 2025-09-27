@@ -13,10 +13,10 @@ import com.maison.maisonpicturebackend.model.dto.spaceuser.SpaceUserAddRequest;
 import com.maison.maisonpicturebackend.model.dto.spaceuser.SpaceUserEditRequest;
 import com.maison.maisonpicturebackend.model.dto.spaceuser.SpaceUserQueryRequest;
 import com.maison.maisonpicturebackend.model.entity.SpaceUser;
-import com.maison.maisonpicturebackend.model.entity.User;
+import com.maison.maisonpicture.domain.user.entity.User;
 import com.maison.maisonpicturebackend.model.vo.SpaceUserVO;
 import com.maison.maisonpicturebackend.service.SpaceUserService;
-import com.maison.maisonpicturebackend.service.UserService;
+import com.maison.maisonpicture.application.service.UserApplicationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +37,7 @@ public class SpaceUserController {
     private SpaceUserService spaceUserService;
 
     @Resource
-    private UserService userService;
+    private UserApplicationService userApplicationService;
 
     /**
      * 添加成员到空间
@@ -131,7 +131,7 @@ public class SpaceUserController {
      */
     @PostMapping("/list/my")
     public BaseResponse<List<SpaceUserVO>> listMyTeamSpace(HttpServletRequest request) {
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userApplicationService.getLoginUser(request);
         SpaceUserQueryRequest spaceUserQueryRequest = new SpaceUserQueryRequest();
         spaceUserQueryRequest.setUserId(loginUser.getId());
         List<SpaceUser> spaceUserList = spaceUserService.list(

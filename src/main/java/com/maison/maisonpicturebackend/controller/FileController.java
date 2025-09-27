@@ -6,7 +6,7 @@ import com.maison.maisonpicturebackend.common.ResultUtils;
 import com.maison.maisonpicturebackend.constant.UserConstant;
 import com.maison.maisonpicturebackend.exception.BusinessException;
 import com.maison.maisonpicturebackend.exception.ErrorCode;
-import com.maison.maisonpicturebackend.manager.CosManager;
+import com.maison.maisonpicture.infrastructure.api.CosManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

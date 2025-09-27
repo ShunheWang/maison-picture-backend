@@ -1,6 +1,6 @@
 package com.maison.maisonpicturebackend.manager.websocket.model;
 
-import com.maison.maisonpicturebackend.model.vo.UserVO;
+import com.maison.maisonpicture.interfaces.vo.user.UserVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -9,6 +9,7 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpStatus;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
+import com.maison.maisonpicture.infrastructure.api.CosManager;
 import com.maison.maisonpicturebackend.config.CosClientConfig;
 import com.maison.maisonpicturebackend.exception.BusinessException;
 import com.maison.maisonpicturebackend.exception.ErrorCode;

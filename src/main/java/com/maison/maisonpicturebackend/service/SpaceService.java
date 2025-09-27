@@ -6,8 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.maison.maisonpicturebackend.model.dto.space.SpaceAddRequest;
 import com.maison.maisonpicturebackend.model.dto.space.SpaceQueryRequest;
 import com.maison.maisonpicturebackend.model.entity.Space;
-import com.maison.maisonpicturebackend.model.entity.Space;
-import com.maison.maisonpicturebackend.model.entity.User;
+import com.maison.maisonpicture.domain.user.entity.User;
 import com.maison.maisonpicturebackend.model.vo.SpaceVO;
 
 import javax.servlet.http.HttpServletRequest;

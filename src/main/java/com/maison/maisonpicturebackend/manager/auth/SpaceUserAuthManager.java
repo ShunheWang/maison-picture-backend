@@ -7,11 +7,11 @@ import com.maison.maisonpicturebackend.manager.auth.model.SpaceUserAuthConfig;
 import com.maison.maisonpicturebackend.manager.auth.model.SpaceUserRole;
 import com.maison.maisonpicturebackend.model.entity.Space;
 import com.maison.maisonpicturebackend.model.entity.SpaceUser;
-import com.maison.maisonpicturebackend.model.entity.User;
+import com.maison.maisonpicture.domain.user.entity.User;
 import com.maison.maisonpicturebackend.model.enums.SpaceRoleEnum;
 import com.maison.maisonpicturebackend.model.enums.SpaceTypeEnum;
 import com.maison.maisonpicturebackend.service.SpaceUserService;
-import com.maison.maisonpicturebackend.service.UserService;
+import com.maison.maisonpicture.application.service.UserApplicationService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -25,7 +25,7 @@ public class SpaceUserAuthManager {
     private SpaceUserService spaceUserService;
 
     @Resource
-    private UserService userService;
+    private UserApplicationService userApplicationService;
 
     public static final SpaceUserAuthConfig SPACE_USER_AUTH_CONFIG;
 
@@ -66,7 +66,7 @@ public class SpaceUserAuthManager {
         List<String> ADMIN_PERMISSIONS = getPermissionsByRole(SpaceRoleEnum.ADMIN.getValue());
         // 公共图库
         if (space == null) {
-            if (userService.isAdmin(loginUser)) {
+            if (userApplicationService.isAdmin(loginUser)) {
                 return ADMIN_PERMISSIONS;
             }
             return new ArrayList<>();
@@ -79,7 +79,7 @@ public class SpaceUserAuthManager {
         switch (spaceTypeEnum) {
             case PRIVATE:
                 // 私有空间，仅本人或管理员有所有权限
-                if (space.getUserId().equals(loginUser.getId()) || userService.isAdmin(loginUser)) {
+                if (space.getUserId().equals(loginUser.getId()) || userApplicationService.isAdmin(loginUser)) {
                     return ADMIN_PERMISSIONS;
                 } else {
                     return new ArrayList<>();

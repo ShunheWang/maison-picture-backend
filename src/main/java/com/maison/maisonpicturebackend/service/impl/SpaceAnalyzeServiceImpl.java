@@ -12,12 +12,12 @@ import com.maison.maisonpicturebackend.mapper.SpaceMapper;
 import com.maison.maisonpicturebackend.model.dto.space.analyze.*;
 import com.maison.maisonpicturebackend.model.entity.Picture;
 import com.maison.maisonpicturebackend.model.entity.Space;
-import com.maison.maisonpicturebackend.model.entity.User;
+import com.maison.maisonpicture.domain.user.entity.User;
 import com.maison.maisonpicturebackend.model.vo.space.analyze.*;
 import com.maison.maisonpicturebackend.service.PictureService;
 import com.maison.maisonpicturebackend.service.SpaceAnalyzeService;
 import com.maison.maisonpicturebackend.service.SpaceService;
-import com.maison.maisonpicturebackend.service.UserService;
+import com.maison.maisonpicture.application.service.UserApplicationService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,7 +35,7 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
     implements SpaceAnalyzeService {
 
     @Resource
-    private UserService userService;
+    private UserApplicationService userApplicationService;
 
     @Resource
     private SpaceService spaceService;
@@ -56,7 +56,7 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
         if (spaceUsageAnalyzeRequest.isQueryAll() || spaceUsageAnalyzeRequest.isQueryPublic()) {
             // 查询全部或公共图库逻辑
             // 仅管理员可以访问
-            boolean isAdmin = userService.isAdmin(loginUser);
+            boolean isAdmin = userApplicationService.isAdmin(loginUser);
             ThrowUtils.throwIf(!isAdmin, ErrorCode.NO_AUTH_ERROR, "无权访问空间");
             // 统计公共图库的资源使用
             QueryWrapper<Picture> queryWrapper = new QueryWrapper<>();
@@ -243,7 +243,7 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
         ThrowUtils.throwIf(spaceRankAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
 
         // 仅管理员可查看空间排行
-        ThrowUtils.throwIf(!userService.isAdmin(loginUser), ErrorCode.NO_AUTH_ERROR, "无权查看空间排行");
+        ThrowUtils.throwIf(!userApplicationService.isAdmin(loginUser), ErrorCode.NO_AUTH_ERROR, "无权查看空间排行");
 
         // 构造查询条件
         QueryWrapper<Space> queryWrapper = new QueryWrapper<>();
@@ -262,7 +262,7 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
         // 检查权限
         if (spaceAnalyzeRequest.isQueryAll() || spaceAnalyzeRequest.isQueryPublic()) {
             // 全空间分析或者公共图库权限校验：仅管理员可访问
-            ThrowUtils.throwIf(!userService.isAdmin(loginUser), ErrorCode.NO_AUTH_ERROR, "无权访问公共图库");
+            ThrowUtils.throwIf(!userApplicationService.isAdmin(loginUser), ErrorCode.NO_AUTH_ERROR, "无权访问公共图库");
         } else {
             // 私有空间权限校验
             Long spaceId = spaceAnalyzeRequest.getSpaceId();

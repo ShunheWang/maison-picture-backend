@@ -1,7 +1,7 @@
 package com.maison.maisonpicturebackend.manager.websocket.disruptor;
 
 import com.maison.maisonpicturebackend.manager.websocket.model.PictureEditRequestMessage;
-import com.maison.maisonpicturebackend.model.entity.User;
+import com.maison.maisonpicture.domain.user.entity.User;
 import lombok.Data;
 import org.springframework.web.socket.WebSocketSession;
 
